@@ -1,13 +1,41 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#root {
+  background: #eee;
+}
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: .2rem;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.chat-window {
+  grid-template-columns: auto 1fr auto;
+}
+
+.you .message-content {
+  @apply bg-green-300 rounded-lg self-end;
+}
+.you .chat-meta {
+  @apply self-end;
+}
+
+.other .message-content {
+  @apply bg-blue-300 rounded-lg self-start;
+}
+.other .chat-meta {
+  @apply self-start;
 }
