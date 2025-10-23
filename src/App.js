@@ -17,7 +17,7 @@ function App() {
   const [statusList, setStatusList] = useState([])
 
   const joinRoom = () => {
-    if (room.trim() === "") return setError('請選擇一個房間或輸入房間的名字')
+    if (room?.trim() === "") return setError('請選擇一個房間或輸入房間的名字')
     if (username.length > 16 || room.length >= 16) return setError('名字或房間的長度不能超過 16 個字')
     socket.emit("join_room", { username, room })
     setShowChat(true)
