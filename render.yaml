@@ -2,8 +2,8 @@ services:
   - type: web
     name: live-chat
     env: node
-    buildCommand: npm install && npm run build && cd server && npm install
-    startCommand: cd server && node index.js
+    buildCommand: npm install --legacy-peer-deps && npm run build && cd server && npm install
+    startCommand: node server/index.js
     envVars:
       - key: NODE_ENV
         value: production
