@@ -41,13 +41,13 @@ This app is configured for single-server deployment where Express serves both th
 
 ---
 
-## 🌐 Custom Domain (chat.ben6515.tw)
+## 🌐 Custom Domain (chat.benben.me)
 
 After deployment on Render:
 
 1. Go to your service **Settings** → **Custom Domains**
 2. Click **Add Custom Domain**
-3. Enter: `chat.ben6515.tw`
+3. Enter: `chat.benben.me`
 4. Render will provide DNS records (usually CNAME)
 5. Add the CNAME record to your DNS provider:
    ```

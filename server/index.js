@@ -15,7 +15,7 @@ const server = http.createServer(app)
 const io = new Server(server, {
   cors: {
     origin: process.env.NODE_ENV === 'production'
-      ? ['https://chat.ben6515.tw', 'https://live-chat-production.up.railway.app']
+      ? ['https://chat.benben.me', 'https://live-chat-production.up.railway.app']
       : 'http://localhost:3000',
     methods: ['GET', 'POST'],
   },
