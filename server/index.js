@@ -30,7 +30,8 @@ io.on('connection', (socket) => {
     // Notify everyone in the room
     let roomName = data?.room || ''
     if (roomName && !showingRoom.includes(roomName)) roomName = 'secret room 🧙🏼'
-    io.to(data.room).emit('status', `${data.username} join 🏄🏼‍♂️ ${roomName}`)
+    const username = data?.username || 'secret guest 👽'
+    io.to(data.room).emit('status', `${username} join 🏄🏼‍♂️ ${roomName}`)
   })
 
   socket.on('send_message', (data) => {
@@ -43,7 +44,8 @@ io.on('connection', (socket) => {
     // console.log(`User with ID: ${socket.id} left room: ${data.room}`)
     let roomName = data?.room || ''
     if (roomName && !showingRoom.includes(roomName)) roomName = 'secret room 🧙🏼'
-    io.to(data.room).emit('status', `${data.username} leave 🚶🏼‍♂️ ${roomName}`)
+    const username = data?.username || 'secret guest 👽'
+    io.to(data.room).emit('status', `${username} leave 🚶🏼‍♂️ ${roomName}`)
     socket.leave(data.room)
   })
 
