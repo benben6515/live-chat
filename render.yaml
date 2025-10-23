@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: live-chat
+    env: node
+    buildCommand: npm install && npm run build && cd server && npm install
+    startCommand: cd server && node index.js
+    envVars:
+      - key: NODE_ENV
+        value: production

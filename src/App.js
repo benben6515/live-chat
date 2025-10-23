@@ -2,8 +2,12 @@ import React, { useState, useEffect } from "react"
 import io from "socket.io-client"
 import Chat from "./Chat"
 
-// const socket = io.connect("")
-const socket = io.connect("http://chat.ben6515.tw")
+// Connect to same server in production, or localhost:3001 in development
+const socket = io.connect(
+  process.env.NODE_ENV === 'production'
+    ? window.location.origin
+    : "http://localhost:3001"
+)
 
 function App() {
   const [username, setUsername] = useState("")
