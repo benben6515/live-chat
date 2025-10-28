@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react"
 const Chat = ({ socket, username, room, setShowChat, setRoom }) => {
   const [currentMessage, setCurrentMessage] = useState("")
   const [messageList, setMessageList] = useState([])
+  const [copySuccess, setCopySuccess] = useState(false)
 
   const sendMessage = async () => {
     if (currentMessage.trim() === "") return
@@ -35,12 +36,41 @@ const Chat = ({ socket, username, room, setShowChat, setRoom }) => {
     socket.emit("leave_room", { username, room })
   }
 
+  const shareRoomLink = () => {
+    const shareUrl = `${window.location.origin}/?room=${encodeURIComponent(room)}`
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      setCopySuccess(true)
+      setTimeout(() => setCopySuccess(false), 2000)
+    }).catch(err => {
+      console.error('Failed to copy:', err)
+    })
+  }
+
   return (
     <div className='chat-window h-100 w-80 pb-2 border bg-gray-200 border-gray-300 rounded shadow-lg'>
-      <div className='chat-header flex justify-between bg-gray-800'>
-        <p className='text-green-50 p-2 text-xl leading-6 overflow-ellipsis'>Room: {room}</p>
-        <button className='text-green-50 p-2 text-xl leading-6 transition-colors duration-300 hover:bg-red-500' onClick={leaveHandler}>Leave</button>
+      <div className='chat-header bg-gray-800'>
+        <p className='text-green-50 p-2 text-xl leading-6 text-center truncate'>Room: {room}</p>
+        <div className='flex justify-center gap-2 pb-2'>
+          <button
+            className='text-green-50 px-3 py-1 text-sm transition-colors duration-300 hover:bg-blue-500 rounded'
+            onClick={shareRoomLink}
+            title='Share room link'
+          >
+            Share
+          </button>
+          <button
+            className='text-green-50 px-3 py-1 text-sm transition-colors duration-300 hover:bg-red-500 rounded'
+            onClick={leaveHandler}
+          >
+            Leave
+          </button>
+        </div>
       </div>
+      {copySuccess && (
+        <div className='bg-green-100 text-green-800 px-2 py-1 text-sm text-center'>
+          Room link copied to clipboard!
+        </div>
+      )}
       <div id="chat-body" className='chat-body h-80 ml-1 px-1 py-2 flex flex-col overflow-y-scroll'>
         {messageList.map(({ userId, message, author, time }) => (
           <div 

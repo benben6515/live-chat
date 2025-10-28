@@ -15,17 +15,29 @@ function App() {
   const [error, setError] = useState("")
   const [showChat, setShowChat] = useState(false)
   const [statusList, setStatusList] = useState([])
+  const [showHowToUse, setShowHowToUse] = useState(false)
 
   const joinRoom = () => {
     if (room?.trim() === "") return setError('請選擇一個房間或輸入房間的名字')
     if (username.length > 16 || room.length >= 16) return setError('名字或房間的長度不能超過 16 個字')
     socket.emit("join_room", { username, room })
     setShowChat(true)
+    // Update URL with room parameter
+    window.history.pushState({}, '', `/?room=${encodeURIComponent(room)}`)
   }
 
   useEffect(() => {
     setError('')
   }, [username, room])
+
+  // Read room parameter from URL on page load
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const roomParam = urlParams.get('room')
+    if (roomParam) {
+      setRoom(decodeURIComponent(roomParam))
+    }
+  }, [])
 
   useEffect(() => {
     socket.on("status", (data) =>{
@@ -72,6 +84,12 @@ function App() {
               join a room
             </button>
             {error && <div className="text-red-500">{error}</div>}
+            <button
+              className='text-blue-500 underline text-sm mt-2'
+              onClick={() => setShowHowToUse(true)}
+            >
+              How to use
+            </button>
           </>
         ) : (
           <Chat
@@ -84,13 +102,46 @@ function App() {
         )}
         <div id="status-body" className="h-20 overflow-y-hidden">
           {statusList.map((status) => (
-              <p 
+              <p
                 key={Math.random().toString(26).slice(2)}
                 className="text-sm text-gray-500"
               >{status}</p>
           ))}
         </div>
       </div>
+
+      {/* How to Use Modal */}
+      {showHowToUse && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={() => setShowHowToUse(false)}>
+          <div className="bg-white rounded-lg shadow-xl p-6 max-w-md m-4" onClick={(e) => e.stopPropagation()}>
+            <h2 className="text-2xl font-bold mb-4">How to Use</h2>
+            <div className="space-y-3 text-sm">
+              <div>
+                <h3 className="font-semibold">1. Join a Room</h3>
+                <p>Enter your name and choose a room from the list or create a new one.</p>
+              </div>
+              <div>
+                <h3 className="font-semibold">2. Share Room Link</h3>
+                <p>Once in a room, click the "Share" button to copy the room link. Share it with friends!</p>
+              </div>
+              <div>
+                <h3 className="font-semibold">3. Join via Link</h3>
+                <p>When someone shares a room link with you, the room name will be automatically filled in.</p>
+              </div>
+              <div>
+                <h3 className="font-semibold">4. Chat & Leave</h3>
+                <p>Send messages by typing and pressing Enter. Click "Leave" when done.</p>
+              </div>
+            </div>
+            <button
+              className="mt-6 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+              onClick={() => setShowHowToUse(false)}
+            >
+              Got it!
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
